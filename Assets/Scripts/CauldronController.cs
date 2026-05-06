@@ -23,20 +23,20 @@ public class CauldronController : MonoBehaviour
     public void AddingredientRed()
     {
         cauldron.AddIngredient(ColorID.Red);
-        Debug.Log("빨간색 넣었어 빨갱아");
+        Debug.Log("빨간색 추가");
         
     }
 
     public void AddingredientBlue()
     {
         cauldron.AddIngredient(ColorID.Blue);
-        Debug.Log("파란색 넣었어 파랭아");
+        Debug.Log("파란색 추가");
     }
 
     public void AddingredientYellow()
     {
         cauldron.AddIngredient(ColorID.Yellow);
-        Debug.Log("노란색 넣었어 노랭아");
+        Debug.Log("노란색 추가");
     }
 
     public void SubmitProductButton()
@@ -48,7 +48,7 @@ public class CauldronController : MonoBehaviour
     public void ClearCauldronButton()
     {
         cauldron.ClearCauldron();
-        Debug.Log("지웠어 노랭아");
+        Debug.Log("색 지워짐");
     }
 
     private void SubmitProduct()
@@ -58,11 +58,11 @@ public class CauldronController : MonoBehaviour
 
         if (result.ID == currentOrder)
         {
-            Debug.Log("주문 성공! 정답입니다.");
+            Debug.Log("정답");
         }
         else
         {
-            Debug.Log("오답입니다. 다시 만들어주세요.");
+            Debug.Log("오답");
         }
     }
 }
