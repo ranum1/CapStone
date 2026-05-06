@@ -48,4 +48,9 @@ public class ColorMixer
         _currentMixture = ColorID.None;
         return finalProduct;
     }
+
+    public void ClearCauldron()
+    {
+        _currentMixture = ColorID.None;
+    }
 }

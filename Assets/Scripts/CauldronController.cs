@@ -17,24 +17,38 @@ public class CauldronController : MonoBehaviour
 
     void Update()
     {
-        // 실제 게임에서는 UI 버튼 클릭 이벤트로 대체합니다.
-        // 테스트용: R을 누르면 빨강, B를 누르면 파랑 투입, Space로 제작 완료
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            cauldron.AddIngredient(ColorID.Red);
-            Debug.Log("빨간색 투입");
-        }
+        
+    }
 
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            cauldron.AddIngredient(ColorID.Blue);
-            Debug.Log("파란색 투입");
-        }
+    public void AddingredientRed()
+    {
+        cauldron.AddIngredient(ColorID.Red);
+        Debug.Log("빨간색 넣었어 빨갱아");
+        
+    }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SubmitProduct();
-        }
+    public void AddingredientBlue()
+    {
+        cauldron.AddIngredient(ColorID.Blue);
+        Debug.Log("파란색 넣었어 파랭아");
+    }
+
+    public void AddingredientYellow()
+    {
+        cauldron.AddIngredient(ColorID.Yellow);
+        Debug.Log("노란색 넣었어 노랭아");
+    }
+
+    public void SubmitProductButton()
+    {
+        SubmitProduct();
+        
+    }
+
+    public void ClearCauldronButton()
+    {
+        cauldron.ClearCauldron();
+        Debug.Log("지웠어 노랭아");
     }
 
     private void SubmitProduct()
