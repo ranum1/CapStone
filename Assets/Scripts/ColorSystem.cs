@@ -1,6 +1,6 @@
 using System;
 
-// MonoBehaviour¸¦ »ó¼Ó¹ÞÁö ¾Ê½À´Ï´Ù.
+// MonoBehaviourï¿½ï¿½ ï¿½ï¿½Ó¹ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½.
 [Flags]
 public enum ColorID
 {
@@ -11,7 +11,7 @@ public enum ColorID
     Orange = Red | Yellow,
     Purple = Red | Blue,
     Green = Yellow | Blue,
-    Brown = Red | Yellow | Blue
+    Black = Red | Yellow | Blue
 }
 
 public class ColorProduct
@@ -36,6 +36,7 @@ public class ColorProduct
 public class ColorMixer
 {
     private ColorID _currentMixture = ColorID.None;
+    public ColorID CurrentMixture => _currentMixture;
 
     public void AddIngredient(ColorID ingredient)
     {

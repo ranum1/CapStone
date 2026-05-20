@@ -1,21 +1,27 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
-// MonoBehaviour¸¦ »ó¼Ó¹Ş¾Æ À¯´ÏÆ¼ ¿£Áø°ú »óÈ£ÀÛ¿ëÇÕ´Ï´Ù.
 public class CauldronController : MonoBehaviour
 {
-    // ·ÎÁ÷À» ´ã´çÇÒ ¹Í¼­±â °´Ã¼¸¦ ¸â¹ö º¯¼ö·Î °¡Áı´Ï´Ù.
+    // [ì¶”ê°€] ìƒ‰ìƒì„ ë³€ê²½í•  ìŠ¤í”„ë¼ì´íŠ¸ ë Œë”ëŸ¬ë¥¼ ì—°ê²°í•©ë‹ˆë‹¤.
+    // ì¸ìŠ¤í™í„° ì°½ì—ì„œ ê°€ë§ˆì†¥ ì•ˆì˜ ì•¡ì²´ë‚˜ ê²°ê³¼ë¬¼ ì´ë¯¸ì§€ë¥¼ ë“œë˜ê·¸í•´ì„œ ë„£ì–´ì£¼ì„¸ìš”.
+    public SpriteRenderer resultDisplaySprite;
+
+    public OrderManagerController OrMan;
+
     private ColorMixer cauldron;
 
-    // ÇöÀç ÁÖ¹® (Å×½ºÆ®¿ë)
+    // í˜„ì¬ ì£¼ë¬¸ (í…ŒìŠ¤íŠ¸ìš©)
     public ColorID currentOrder = ColorID.Purple;
 
     void Start()
     {
-        // °ÔÀÓ ½ÃÀÛ ½Ã ¹Í¼­±â ÀÎ½ºÅÏ½ºÈ­
         cauldron = new ColorMixer();
     }
 
-    void Update()
+    // ... (AddIngredient ê´€ë ¨ ì½”ë“œë“¤ì€ ë™ì¼)
+
+        void Update()
     {
         
     }
@@ -23,46 +29,91 @@ public class CauldronController : MonoBehaviour
     public void AddingredientRed()
     {
         cauldron.AddIngredient(ColorID.Red);
-        Debug.Log("»¡°£»ö Ãß°¡");
-        
+        Debug.Log("ë§ˆì  íƒ€ ì¶”ê°€");
     }
 
     public void AddingredientBlue()
     {
         cauldron.AddIngredient(ColorID.Blue);
-        Debug.Log("ÆÄ¶õ»ö Ãß°¡");
+        Debug.Log("ì‹œì•ˆ ì¶”ê°€");
     }
 
     public void AddingredientYellow()
     {
         cauldron.AddIngredient(ColorID.Yellow);
-        Debug.Log("³ë¶õ»ö Ãß°¡");
+        Debug.Log("ë…¸ë‘ ì¶”ê°€");
     }
 
     public void SubmitProductButton()
     {
         SubmitProduct();
-        
     }
 
     public void ClearCauldronButton()
     {
         cauldron.ClearCauldron();
-        Debug.Log("»ö Áö¿öÁü");
+        // ì´ˆê¸°í™” ì‹œ ìƒ‰ìƒì„ ë‹¤ì‹œ íˆ¬ëª…í•˜ê²Œë‚˜ í°ìƒ‰ìœ¼ë¡œ ë°”ê¿€ ìˆ˜ ìˆìŠµë‹ˆë‹¤.
+        if (resultDisplaySprite != null) resultDisplaySprite.color = Color.white;
+        Debug.Log("ì†¥ ë¹„ìš°ê¸° ì™„ë£Œ");
     }
 
     private void SubmitProduct()
     {
         ColorProduct result = cauldron.CraftAndClear();
-        Debug.Log($"Á¦ÃâµÈ »óÇ°: {result.ID} (Æ¼¾î: {result.Tier})");
+        Debug.Log($"ì œì‘ëœ ìƒí’ˆ: {result.ID} (í‹°ì–´: {result.Tier})");
 
-        if (result.ID == currentOrder)
+        // [ì¶”ê°€] ID ê°’ì— ë”°ë¼ ìŠ¤í”„ë¼ì´íŠ¸ ìƒ‰ìƒ ë³€ê²½
+        UpdateSpriteColor(result.ID);
+
+
+
+        if (OrMan.CheckAnswer(result.ID))
         {
-            Debug.Log("Á¤´ä");
+            Debug.Log("ì£¼ë¬¸ ì„±ê³µ!");
+            OrMan.GenerateRandomOrder();
         }
         else
         {
-            Debug.Log("¿À´ä");
+            Debug.Log("ì£¼ë¬¸ ì‹¤íŒ¨...");
+            OrMan.GenerateRandomOrder();
+        }
+    }
+
+    // [ì¶”ê°€] switch ë¬¸ì„ í™œìš©í•œ ìƒ‰ìƒ ì—…ë°ì´íŠ¸ ë¡œì§
+    private void UpdateSpriteColor(ColorID id)
+    {
+        if (resultDisplaySprite == null)
+        {
+            Debug.LogWarning("resultDisplaySpriteê°€ í• ë‹¹ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤!");
+            return;
+        }
+
+        switch (id)
+        {
+            case ColorID.Red:
+                resultDisplaySprite.color = new Color(255f, 0f, 255f);
+                break;
+            case ColorID.Blue:
+                resultDisplaySprite.color = new Color(0f, 255f, 255f);
+                break;
+            case ColorID.Yellow:
+                resultDisplaySprite.color = new Color(255f, 255f, 0f);
+                break;
+            case ColorID.Purple:
+                resultDisplaySprite.color = new Color(0.5f, 0f, 0.5f); // ë³´ë¼ìƒ‰ ì§ì ‘ ì •ì˜
+                break;
+            case ColorID.Orange:
+                resultDisplaySprite.color = new Color(1f, 0.5f, 0f); // ì£¼í™©ìƒ‰
+                break;
+            case ColorID.Green:
+                resultDisplaySprite.color = Color.green;
+                break;
+            case ColorID.Black:
+                resultDisplaySprite.color = Color.black;
+                break;
+            default:
+                resultDisplaySprite.color = Color.white; // ê¸°ë³¸ê°’
+                break;
         }
     }
 }
