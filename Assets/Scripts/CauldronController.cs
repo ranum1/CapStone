@@ -1,5 +1,7 @@
 using System.Runtime.CompilerServices;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CauldronController : MonoBehaviour
 {
@@ -12,7 +14,9 @@ public class CauldronController : MonoBehaviour
     private ColorMixer cauldron;
 
     // 현재 주문 (테스트용)
-    public ColorID currentOrder = ColorID.Purple;
+    //public ColorID currentOrder = ColorID.Purple;
+
+    public SpriteRenderer AnswerImage;
 
     void Start()
     {
@@ -26,15 +30,15 @@ public class CauldronController : MonoBehaviour
         
     }
 
-    public void AddingredientRed()
+    public void AddingredientMagenta()
     {
-        cauldron.AddIngredient(ColorID.Red);
+        cauldron.AddIngredient(ColorID.Magenta);
         Debug.Log("마젠타 추가");
     }
 
-    public void AddingredientBlue()
+    public void AddingredientCyan()
     {
-        cauldron.AddIngredient(ColorID.Blue);
+        cauldron.AddIngredient(ColorID.Cyan);
         Debug.Log("시안 추가");
     }
 
@@ -71,12 +75,21 @@ public class CauldronController : MonoBehaviour
         {
             Debug.Log("주문 성공!");
             OrMan.GenerateRandomOrder();
+            AnswerImage.color = Color.green;
+            Invoke("ResetAnswer",1f);
         }
         else
         {
             Debug.Log("주문 실패...");
             OrMan.GenerateRandomOrder();
+            AnswerImage.color = Color.red;
+            Invoke("ResetAnswer",1f);
         }
+    }
+
+    void ResetAnswer()
+    {
+        AnswerImage.color = Color.white;
     }
 
     // [추가] switch 문을 활용한 색상 업데이트 로직
@@ -90,20 +103,20 @@ public class CauldronController : MonoBehaviour
 
         switch (id)
         {
-            case ColorID.Red:
+            case ColorID.Magenta:
                 resultDisplaySprite.color = new Color(255f, 0f, 255f);
                 break;
-            case ColorID.Blue:
+            case ColorID.Cyan:
                 resultDisplaySprite.color = new Color(0f, 255f, 255f);
                 break;
             case ColorID.Yellow:
                 resultDisplaySprite.color = new Color(255f, 255f, 0f);
                 break;
-            case ColorID.Purple:
-                resultDisplaySprite.color = new Color(0.5f, 0f, 0.5f); // 보라색 직접 정의
+            case ColorID.Red:
+                resultDisplaySprite.color = Color.red;
                 break;
-            case ColorID.Orange:
-                resultDisplaySprite.color = new Color(1f, 0.5f, 0f); // 주황색
+            case ColorID.Blue:
+                resultDisplaySprite.color = Color.blue;
                 break;
             case ColorID.Green:
                 resultDisplaySprite.color = Color.green;

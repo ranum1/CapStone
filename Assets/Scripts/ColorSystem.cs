@@ -5,13 +5,15 @@ using System;
 public enum ColorID
 {
     None = 0,
-    Red = 1 << 0,
+    Magenta = 1 << 0,
     Yellow = 1 << 1,
-    Blue = 1 << 2,
-    Orange = Red | Yellow,
-    Purple = Red | Blue,
-    Green = Yellow | Blue,
-    Black = Red | Yellow | Blue
+    Cyan = 1 << 2,
+    Red = Magenta | Yellow,
+    Blue = Magenta | Cyan,
+    Green = Yellow | Cyan,
+    Black = Magenta | Yellow | Cyan,
+
+    Dummy = -2
 }
 
 public class ColorProduct
