@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Collections;
 
 public class CauldronController : MonoBehaviour, IDropHandler, IPointerEnterHandler
 {
@@ -10,6 +11,7 @@ public class CauldronController : MonoBehaviour, IDropHandler, IPointerEnterHand
     // 인스펙터 창에서 가마솥 안의 액체나 결과물 이미지를 드래그해서 넣어주세요.
     public SpriteRenderer resultDisplaySprite;
 
+    public GameManager gameManager;
     public OrderManagerController OrMan;
 
     private ColorMixer cauldron;
@@ -36,7 +38,7 @@ public class CauldronController : MonoBehaviour, IDropHandler, IPointerEnterHand
 
     public void SubmitProductButton()
     {
-        SubmitProduct();
+        StartCoroutine(SubmitRoutine());
     }
 
     public void ClearCauldronButton()
@@ -47,30 +49,36 @@ public class CauldronController : MonoBehaviour, IDropHandler, IPointerEnterHand
         Debug.Log("솥 비우기 완료");
     }
 
-    private void SubmitProduct()
+    private IEnumerator SubmitRoutine()
     {
         ColorProduct result = cauldron.CraftAndClear();
+
         Debug.Log($"제작된 상품: {result.ID} (티어: {result.Tier})");
 
-        // [추가] ID 값에 따라 스프라이트 색상 변경
         UpdateSpriteColor(result.ID);
-        Invoke("ClearCauldronButton",1f);
 
         if (OrMan.CheckAnswer(result.ID))
         {
             Debug.Log("주문 성공!");
-            OrMan.GenerateRandomOrder();
-            AnswerImage.color = Color.green;
-            Invoke("ResetAnswer",1f);
 
+            AnswerImage.color = Color.green;
         }
         else
         {
             Debug.Log("주문 실패...");
-            OrMan.GenerateRandomOrder();
+
             AnswerImage.color = Color.red;
-            Invoke("ResetAnswer",1f);
         }
+
+        yield return new WaitForSeconds(1f);
+
+        ClearCauldronButton();
+
+        yield return new WaitForSeconds(1f);
+
+        OrMan.GenerateRandomOrder();
+
+        gameManager.ChangeState(GameState.Guest);
     }
 
     void ResetAnswer()

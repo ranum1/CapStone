@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b4ec6984e12bd644a6faf82193de4be, type: 3}
   m_Name: Order Recipe4
   m_EditorClassIdentifier: Assembly-CSharp::OrderRecipe
-  orderText: RedPls
+  orderText: "\uBE68\uAC04\uC0C9 \uC8FC\uC138\uC694"
   requiredColor: 3
   reward: 0

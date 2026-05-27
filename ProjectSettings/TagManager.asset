@@ -42,5 +42,14 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Title
+    uniqueID: 439620693
+    locked: 0
+  - name: Guest
+    uniqueID: 2704254705
+    locked: 0
+  - name: Ingame
+    uniqueID: 3737157869
+    locked: 0
   m_RenderingLayers:
   - Default

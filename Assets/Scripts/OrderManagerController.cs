@@ -27,7 +27,7 @@ public class OrderManagerController : MonoBehaviour
         orderTextUI.text = currentOrder.orderText;
 
         Debug.Log("정답 색상: " +
-                  currentOrder.requiredColor);
+                    currentOrder.requiredColor);
     }
 
         public bool CheckAnswer(ColorID playerColor)
