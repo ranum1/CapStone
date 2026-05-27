@@ -40,6 +40,7 @@ public class ColorMixer
     private ColorID _currentMixture = ColorID.None;
     public ColorID CurrentMixture => _currentMixture;
 
+
     public void AddIngredient(ColorID ingredient)
     {
         _currentMixture |= ingredient;

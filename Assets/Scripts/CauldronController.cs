@@ -1,9 +1,10 @@
 using System.Runtime.CompilerServices;
-using UnityEditor.ShaderGraph.Internal;
+//using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class CauldronController : MonoBehaviour
+public class CauldronController : MonoBehaviour, IDropHandler, IPointerEnterHandler
 {
     // [추가] 색상을 변경할 스프라이트 렌더러를 연결합니다.
     // 인스펙터 창에서 가마솥 안의 액체나 결과물 이미지를 드래그해서 넣어주세요.
@@ -12,6 +13,8 @@ public class CauldronController : MonoBehaviour
     public OrderManagerController OrMan;
 
     private ColorMixer cauldron;
+    IngredientDrag ingredientDrag;
+
 
     // 현재 주문 (테스트용)
     //public ColorID currentOrder = ColorID.Purple;
@@ -21,6 +24,7 @@ public class CauldronController : MonoBehaviour
     void Start()
     {
         cauldron = new ColorMixer();
+
     }
 
     // ... (AddIngredient 관련 코드들은 동일)
@@ -28,24 +32,6 @@ public class CauldronController : MonoBehaviour
         void Update()
     {
         
-    }
-
-    public void AddingredientMagenta()
-    {
-        cauldron.AddIngredient(ColorID.Magenta);
-        Debug.Log("마젠타 추가");
-    }
-
-    public void AddingredientCyan()
-    {
-        cauldron.AddIngredient(ColorID.Cyan);
-        Debug.Log("시안 추가");
-    }
-
-    public void AddingredientYellow()
-    {
-        cauldron.AddIngredient(ColorID.Yellow);
-        Debug.Log("노랑 추가");
     }
 
     public void SubmitProductButton()
@@ -68,8 +54,7 @@ public class CauldronController : MonoBehaviour
 
         // [추가] ID 값에 따라 스프라이트 색상 변경
         UpdateSpriteColor(result.ID);
-
-
+        Invoke("ClearCauldronButton",1f);
 
         if (OrMan.CheckAnswer(result.ID))
         {
@@ -77,6 +62,7 @@ public class CauldronController : MonoBehaviour
             OrMan.GenerateRandomOrder();
             AnswerImage.color = Color.green;
             Invoke("ResetAnswer",1f);
+
         }
         else
         {
@@ -129,4 +115,29 @@ public class CauldronController : MonoBehaviour
                 break;
         }
     }
+
+    public void OnDrop(PointerEventData eventData)
+    {
+        Debug.Log("드롭됨");
+
+        IngredientDrag ingredient =
+            eventData.pointerDrag.GetComponent<IngredientDrag>();
+
+        if (ingredient != null)
+        {
+            ingredient.isDropped = true;
+
+            cauldron.AddIngredient(ingredient.ingredientType);
+
+            Debug.Log(ingredient.ingredientType + " 추가");
+
+            // Destroy(ingredient.gameObject);
+        }
+    }
+    
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        Debug.Log("마우스 올라옴");
+    }
+
 }
