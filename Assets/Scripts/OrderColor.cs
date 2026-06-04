@@ -4,6 +4,8 @@ using UnityEngine;
 public class OrderRecipe : ScriptableObject
 {
     public string orderText;
+    public string successText;
+    public string failText;
 
     public ColorID requiredColor;
 

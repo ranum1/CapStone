@@ -1,10 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public enum GameState { Title, Guest, Craft }
 
 public class GameManager : MonoBehaviour
 {
+    public int Gold { get; private set; }
 
     public GameState currentState;
     public GameObject title;

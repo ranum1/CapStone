@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: Order Recipe4
   m_EditorClassIdentifier: Assembly-CSharp::OrderRecipe
   orderText: "\uBE68\uAC04\uC0C9 \uC8FC\uC138\uC694"
+  successText: "\uC0AC\uACFC\uAC19\uC740 \uC0C9\uC774\uB124\uC694!"
+  failText: "\uC774\uAC8C \uC544\uB2C8\uC5D0\uC694!"
   requiredColor: 3
-  reward: 0
+  reward: 2

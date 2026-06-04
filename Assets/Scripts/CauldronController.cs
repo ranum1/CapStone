@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
+using TMPro;
 
 public class CauldronController : MonoBehaviour, IDropHandler, IPointerEnterHandler
 {
@@ -12,16 +13,17 @@ public class CauldronController : MonoBehaviour, IDropHandler, IPointerEnterHand
     public SpriteRenderer resultDisplaySprite;
 
     public GameManager gameManager;
+    public MoneyManager moneyManager;
     public OrderManagerController OrMan;
+    private OrderRecipe currentOrder;
+
+    public TMP_Text guestText;
 
     private ColorMixer cauldron;
     IngredientDrag ingredientDrag;
-
-
+    
     // 현재 주문 (테스트용)
     //public ColorID currentOrder = ColorID.Purple;
-
-    public SpriteRenderer AnswerImage;
 
     void Start()
     {
@@ -53,37 +55,32 @@ public class CauldronController : MonoBehaviour, IDropHandler, IPointerEnterHand
     {
         ColorProduct result = cauldron.CraftAndClear();
 
-        Debug.Log($"제작된 상품: {result.ID} (티어: {result.Tier})");
+        // Debug.Log($"제작된 상품: {result.ID} (티어: {result.Tier})");
 
         UpdateSpriteColor(result.ID);
 
-        if (OrMan.CheckAnswer(result.ID))
-        {
-            Debug.Log("주문 성공!");
+        gameManager.ChangeState(GameState.Guest);
+        yield return null;
 
-            AnswerImage.color = Color.green;
-        }
-        else
-        {
-            Debug.Log("주문 실패...");
-
-            AnswerImage.color = Color.red;
-        }
-
-        yield return new WaitForSeconds(1f);
 
         ClearCauldronButton();
 
-        yield return new WaitForSeconds(1f);
+    if (OrMan.CheckAnswer(result.ID))
+    {
+        guestText.text =
+            OrMan.CurrentOrder.successText;
+            moneyManager.AddGold(OrMan.CurrentOrder.reward);
+    }
+    else
+    {
+        guestText.text =
+            OrMan.CurrentOrder.failText;
+    }
+    
+        yield return new WaitForSeconds(3f);
 
         OrMan.GenerateRandomOrder();
-
-        gameManager.ChangeState(GameState.Guest);
-    }
-
-    void ResetAnswer()
-    {
-        AnswerImage.color = Color.white;
+    
     }
 
     // [추가] switch 문을 활용한 색상 업데이트 로직

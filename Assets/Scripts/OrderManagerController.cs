@@ -7,15 +7,17 @@ public class OrderManagerController : MonoBehaviour
     public OrderDatabase database;
 
     public TMP_Text orderTextUI;
-
     
 
     private OrderRecipe currentOrder;
+
+    public OrderRecipe CurrentOrder => currentOrder;
 
     void Start()
     {
         GenerateRandomOrder();
     }
+
 
     public void GenerateRandomOrder()
     {
@@ -25,6 +27,7 @@ public class OrderManagerController : MonoBehaviour
         currentOrder = database.orders[randomIndex];
 
         orderTextUI.text = currentOrder.orderText;
+        
 
         Debug.Log("정답 색상: " +
                     currentOrder.requiredColor);
