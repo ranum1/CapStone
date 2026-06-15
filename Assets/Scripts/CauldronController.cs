@@ -13,6 +13,7 @@ public class CauldronController : MonoBehaviour, IDropHandler, IPointerEnterHand
     public SpriteRenderer resultDisplaySprite;
 
     public GameManager gameManager;
+    public GuestController guestController;
     public MoneyManager moneyManager;
     public OrderManagerController OrMan;
     private OrderRecipe currentOrder;
@@ -28,10 +29,7 @@ public class CauldronController : MonoBehaviour, IDropHandler, IPointerEnterHand
     void Start()
     {
         cauldron = new ColorMixer();
-
     }
-
-    // ... (AddIngredient 관련 코드들은 동일)
 
         void Update()
     {
@@ -51,37 +49,73 @@ public class CauldronController : MonoBehaviour, IDropHandler, IPointerEnterHand
         Debug.Log("솥 비우기 완료");
     }
 
-    private IEnumerator SubmitRoutine()
+    public IEnumerator StartGuestSequence()
     {
-        ColorProduct result = cauldron.CraftAndClear();
-
-        // Debug.Log($"제작된 상품: {result.ID} (티어: {result.Tier})");
-
-        UpdateSpriteColor(result.ID);
-
         gameManager.ChangeState(GameState.Guest);
-        yield return null;
 
+        // 첫 주문 생성
+        OrMan.GenerateRandomOrder();
 
-        ClearCauldronButton();
+        // 손님 이미지 설정
+        guestController.SetGuest(
+            OrMan.CurrentOrder.guestSprite);
 
-    if (OrMan.CheckAnswer(result.ID))
+        // 아래에서 등장
+        yield return StartCoroutine(
+            guestController.EnterRoutine());
+
+        // 주문 대사 출력
+        guestText.text =
+            OrMan.CurrentOrder.orderText;
+    }
+
+private IEnumerator SubmitRoutine()
+{
+    ColorProduct result = cauldron.CraftAndClear();
+
+    UpdateSpriteColor(result.ID);
+
+    gameManager.ChangeState(GameState.Guest);
+
+    ClearCauldronButton();
+
+    bool success = OrMan.CheckAnswer(result.ID);
+
+    if (success)
     {
         guestText.text =
             OrMan.CurrentOrder.successText;
-            moneyManager.AddGold(OrMan.CurrentOrder.reward);
+
+        moneyManager.AddGold(
+            OrMan.CurrentOrder.reward);
     }
     else
     {
         guestText.text =
             OrMan.CurrentOrder.failText;
     }
-    
-        yield return new WaitForSeconds(3f);
 
-        OrMan.GenerateRandomOrder();
-    
-    }
+    yield return new WaitForSeconds(3f);
+
+    // 현재 손님 퇴장
+    yield return StartCoroutine(
+        guestController.ExitRoutine());
+
+    // 손님 없는 시간
+    yield return new WaitForSeconds(
+        Random.Range(1f, 3f));
+
+    // 다음 주문 생성
+    OrMan.GenerateRandomOrder();
+
+    // 다음 손님 이미지 변경
+    guestController.SetGuest(
+        OrMan.CurrentOrder.guestSprite);
+
+    // 다음 손님 등장
+    yield return StartCoroutine(
+        guestController.EnterRoutine());
+}
 
     // [추가] switch 문을 활용한 색상 업데이트 로직
     private void UpdateSpriteColor(ColorID id)

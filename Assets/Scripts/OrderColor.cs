@@ -10,4 +10,6 @@ public class OrderRecipe : ScriptableObject
     public ColorID requiredColor;
 
     public int reward;
+
+    public Sprite guestSprite;
 }
