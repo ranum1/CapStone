@@ -1,19 +1,19 @@
 using System;
 
-// MonoBehaviour�� ��ӹ��� �ʽ��ϴ�.
+// ColorSystem 클래스 감싸기를 없애고 최외곽에 바로 선언합니다.
+
 [Flags]
 public enum ColorID
 {
-    None = 0,
-    Magenta = 1 << 0,
-    Yellow = 1 << 1,
-    Cyan = 1 << 2,
-    Red = Magenta | Yellow,
-    Blue = Magenta | Cyan,
-    Green = Yellow | Cyan,
-    Black = Magenta | Yellow | Cyan,
-
-    Dummy = -2
+    None   = 0,
+    Red    = 1 << 0,
+    Orange = 1 << 1,
+    Yellow = 1 << 2,
+    Green  = 1 << 3,
+    Blue   = 1 << 4,
+    Navy = 1 << 5,
+    Purple = 1 << 6,
+    Dummy  = -2
 }
 
 public class ColorProduct
@@ -40,16 +40,31 @@ public class ColorMixer
     private ColorID _currentMixture = ColorID.None;
     public ColorID CurrentMixture => _currentMixture;
 
-
-    public void AddIngredient(ColorID ingredient)
+    public int IngredientCount
     {
+        get
+        {
+            int count = 0, bits = (int)_currentMixture;
+            while (bits > 0) { count += bits & 1; bits >>= 1; }
+            return count;
+        }
+    }
+
+    public bool AddIngredient(ColorID ingredient)
+    {
+        if (IngredientCount >= 3 && (_currentMixture & ingredient) == 0)
+        {
+            return false;
+        }
+
         _currentMixture |= ingredient;
+        return true;
     }
 
     public ColorProduct CraftAndClear()
     {
         ColorProduct finalProduct = new ColorProduct(_currentMixture);
-        _currentMixture = ColorID.None;
+        ClearCauldron();
         return finalProduct;
     }
 

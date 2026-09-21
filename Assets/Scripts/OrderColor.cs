@@ -12,4 +12,7 @@ public class OrderRecipe : ScriptableObject
     public int reward;
 
     public Sprite guestSprite;
+
+
+    
 }

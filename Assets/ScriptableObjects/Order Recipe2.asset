@@ -17,4 +17,4 @@ MonoBehaviour:
   failText: "\uC73C\uB974\uB801..."
   requiredColor: 5
   reward: 5
-  guestSprite: {fileID: -5421058871414505063, guid: 256345c80620e474f8899c9090ea78ef, type: 3}
+  guestSprite: {fileID: 7444046612802208997, guid: 4ecb8eeb02b284c4095ee59f654ebbdf, type: 3}

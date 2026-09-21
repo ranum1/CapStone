@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b4ec6984e12bd644a6faf82193de4be, type: 3}
+  m_Name: New Order Recipe
+  m_EditorClassIdentifier: Assembly-CSharp::OrderRecipe
+  orderText: "\uC5BC\uC74C\uB9C8\uBC95\uC744 \uC4F0\uACE0 \uC2F6\uC5B4\uC694."
+  successText: "\uC640~ \uC5D8\uC0AC\uAC19\uC544\uC694!"
+  failText: "\uC774\uB7F0..."
+  requiredColor: 4
+  reward: 2
+  guestSprite: {fileID: 7595069906352337547, guid: da784d18905596b40b6da3f50995bd74, type: 3}
