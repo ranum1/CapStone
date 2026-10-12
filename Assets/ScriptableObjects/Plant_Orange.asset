@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbfab47c475095c4d8c9091f2d9e6d03, type: 3}
+  m_Name: Plant_Orange
+  m_EditorClassIdentifier: Assembly-CSharp::PlantData
+  plantName: OrangePlant
+  seedItem: {fileID: 11400000, guid: 280c6c6d4dee5954b8c7907190125ca8, type: 2}
+  harvestResultItem: {fileID: 11400000, guid: ac412c90bf6403c4cb533885ec326285, type: 2}
+  timePerStage: 3
+  growthStages:
+  - {fileID: -2534204862239959390, guid: 76aa07cdf2d9fa1459884a66de1d6f83, type: 3}
+  - {fileID: 514717178992000296, guid: 810e889ace41226439bf812994871ada, type: 3}
+  - {fileID: -4203752801499192365, guid: a12a85a5c84deae45b95ab2e6af2d5c8, type: 3}
+  - {fileID: 7439377016079310629, guid: b193a8eca119c91479048c20459dbbaf, type: 3}
+  stageOffsets:
+  - {x: 0, y: 0.1, z: 0}
+  - {x: 0, y: 0.15, z: 0}
+  - {x: 0.026, y: 0.33, z: 0}
+  - {x: 0.012, y: 0.33, z: 0}
+  seedPrice: 15

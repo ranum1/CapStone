@@ -1,29 +1,50 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PotionController : MonoBehaviour
 {
-    [SerializeField]
-    private SpriteRenderer spriteRenderer;
+    [Header("2D SpriteRenderer 방식인 경우")]
+    [SerializeField] private SpriteRenderer bottleRenderer;
+    [SerializeField] private SpriteRenderer liquidRenderer;
 
     private ColorID potionColor;
     public ColorID PotionColor => potionColor;
 
     /// <summary>
-    /// ColorBlendTable을 활용하여 포션의 색상을 업데이트합니다.
+    /// 포션의 색상을 설정하고 빈 병 및 내용물 오브젝트를 모두 활성화합니다.
     /// </summary>
     public void SetPotion(ColorID color)
     {
         potionColor = color;
+        Color targetColor = ColorBlendTable.GetBlendedColor(color);
 
-        if (spriteRenderer != null)
+        gameObject.SetActive(true);
+
+        // 1. SpriteRenderer 방식
+        if (liquidRenderer != null)
         {
-            // Sprite를 교체하는 대신 ColorBlendTable에서 RGB 값을 가져와 색상을 변경합니다.
-            spriteRenderer.color = ColorBlendTable.GetBlendedColor(color);
+            liquidRenderer.gameObject.SetActive(true);
+            liquidRenderer.color = targetColor;
         }
 
-        Debug.Log($"포션 생성 완료 - ColorID: {color}");
+        if (bottleRenderer != null)
+        {
+            bottleRenderer.gameObject.SetActive(true);
+        }
 
-        // 물약 오브젝트 활성화
-        gameObject.SetActive(true);
+        Debug.Log($"[PotionController] 포션 생성 완료! 색상: {targetColor}");
+    }
+
+    /// <summary>
+    /// 제출 완료 시 부모 포션 오브젝트와 자식(Bottle, Liquid) 오브젝트를 모두 비활성화합니다.
+    /// </summary>
+    public void HidePotion()
+    {
+        if (liquidRenderer != null) liquidRenderer.gameObject.SetActive(false);
+        if (bottleRenderer != null) bottleRenderer.gameObject.SetActive(false);
+
+
+        gameObject.SetActive(false);
+        Debug.Log("[PotionController] 포션 및 자식 오브젝트 비활성화 완료");
     }
 }

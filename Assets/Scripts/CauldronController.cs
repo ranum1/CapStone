@@ -42,7 +42,7 @@ public class CauldronController : MonoBehaviour, IDropHandler, IPointerEnterHand
     public void ClearCauldronButton()
     {
         cauldron.ClearCauldron();
-        if (resultDisplaySprite != null) resultDisplaySprite.color = Color.white;
+        if (resultDisplaySprite != null) resultDisplaySprite.color = Color.gray;
         
         // UI 갱신 요청
         UIManager.Instance.ResetIngredientUI();
@@ -58,36 +58,35 @@ public class CauldronController : MonoBehaviour, IDropHandler, IPointerEnterHand
     {
         craftedPotion = cauldron.CraftAndClear();
 
-        UpdateSpriteColor(craftedPotion.ID);
+        Debug.Log($"제작된 색상 ID : {craftedPotion.ID}");
+
         hasCraftedPotion = true;
 
+        // 가마솥 UI 및 비주얼 리셋
         if (resultDisplaySprite != null) resultDisplaySprite.color = Color.white;
+        UIManager.Instance?.ResetIngredientUI();
+        UIManager.Instance?.SetSubmitButtonActive(true);
 
-        // UI 갱신 요청
-        UIManager.Instance.ResetIngredientUI();
-        UIManager.Instance.SetSubmitButtonActive(true);
-
-        gameManager.ChangeState(GameState.Guest);
-        potion.SetActive(true);
-        potionCon.SetPotion(craftedPotion.ID);
-    }
-
-    public IEnumerator StartGuestSequence()
-    {
+        // 손님 화면으로 전환
         gameManager.ChangeState(GameState.Guest);
 
-        OrMan.GenerateRandomOrder();
-        guestController.SetGuest(OrMan.CurrentOrder.guestSprite);
-
-        yield return StartCoroutine(guestController.EnterRoutine());
-
-        // UI 대사 출력 요청
-        UIManager.Instance.SetGuestText(OrMan.CurrentOrder.orderText);
+        // [체크!] PotionController 연결 확인 및 실행
+        if (potionCon != null)
+        {
+            // SetPotion 내부에서 자기 자신(Potion GameObject) 및 자식(Liquid, Bottle)을 모두 켭니다.
+            potionCon.SetPotion(craftedPotion.ID); 
+        }
+        else
+        {
+            Debug.LogError("[에러] CauldronController의 PotionCon 필드가 비어있습니다! Inspector에서 Potion 오브젝트를 연결해 주세요.");
+        }
     }
 
     private IEnumerator SubmitRoutine()
     {
-        if (OrMan.CheckAnswer(craftedPotion.ID))
+        bool isSuccess = OrMan.CheckAnswer(craftedPotion.ID);
+
+        if (isSuccess)
         {
             UIManager.Instance.SetGuestText(OrMan.CurrentOrder.successText);
             moneyManager.AddGold(OrMan.CurrentOrder.reward);
@@ -97,19 +96,59 @@ public class CauldronController : MonoBehaviour, IDropHandler, IPointerEnterHand
             UIManager.Instance.SetGuestText(OrMan.CurrentOrder.failText);
         }
 
-        potion.SetActive(false);
+        GameManager.Instance.RecordOrderResult(isSuccess);
+
+        // [핵심] PotionController를 통해 포션과 자식(Bottle/Liquid) 오브젝트를 함께 끕니다.
+        if (potionCon != null)
+        {
+            potionCon.HidePotion();
+        }
+        else if (potion != null)
+        {
+            potion.SetActive(false);
+        }
+
         hasCraftedPotion = false;
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2.5f);
+
+        // 손님 퇴장 시 대화창 비활성화
+        UIManager.Instance.SetGuestTextActive(false);
 
         yield return StartCoroutine(guestController.ExitRoutine());
-        yield return new WaitForSeconds(Random.Range(1f, 3f));
 
+        // 7번째 주문 완료 시 하루 종료
+        if (GameManager.Instance.IsDayEnded)
+        {
+            yield break;
+        }
+
+        yield return new WaitForSeconds(Random.Range(1f, 2f));
+
+        // 다음 손님 생성 및 등장
         OrMan.GenerateRandomOrder();
         guestController.SetGuest(OrMan.CurrentOrder.guestSprite);
 
         yield return StartCoroutine(guestController.EnterRoutine());
 
+        UIManager.Instance.SetGuestTextActive(true);
+        UIManager.Instance.SetGuestText(OrMan.CurrentOrder.orderText);
+    }
+
+    public IEnumerator StartGuestSequence()
+    {
+        gameManager.ChangeState(GameState.Guest);
+
+        OrMan.GenerateRandomOrder();
+        guestController.SetGuest(OrMan.CurrentOrder.guestSprite);
+
+        // 시작 시 일단 대화창 끄고 등장
+        UIManager.Instance.SetGuestTextActive(false);
+
+        yield return StartCoroutine(guestController.EnterRoutine());
+
+        // 등장 완료 후 대화창 켜고 대사 출력
+        UIManager.Instance.SetGuestTextActive(true);
         UIManager.Instance.SetGuestText(OrMan.CurrentOrder.orderText);
     }
 

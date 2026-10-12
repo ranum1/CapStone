@@ -3,8 +3,8 @@ guid: 03d3d235f347e894b86ba165a4efc4ce
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7337031790827904880
-    second: YellowIngredient_0
+      213: -8425141836431729757
+    second: yellow_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: YellowIngredient_0
+      name: yellow_0
       rect:
         serializedVersion: 2
-        x: 14
-        y: 18
-        width: 74
-        height: 63
+        x: 2
+        y: 3
+        width: 29
+        height: 29
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 07f9b0e5a8f52d560800000000000000
-      internalID: 7337031790827904880
+      spriteID: 3ab54395322e31b80800000000000000
+      internalID: -8425141836431729757
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      YellowIngredient_0: 7337031790827904880
+      yellow_0: -8425141836431729757
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
